@@ -4,7 +4,7 @@ const Modal = ({ handleClose, show, children }) => {
     const showHideClassName = show ? "modal display-block" : "modal display-none";
 
     return (
-        <div className={showHideClassName}>
+        <div style = {{ margin: "100px auto" }} className={showHideClassName}>
             <section className="modal-main">
                 <div class="modal" id="myModal">
                     <div class="modal-dialog">

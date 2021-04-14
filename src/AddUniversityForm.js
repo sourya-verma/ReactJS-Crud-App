@@ -13,7 +13,12 @@ const AddForm = (props) => {
         }
 
     }
+    const formatDate = (a) => {
+        const date = new Date(a);
+        const changedDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+        return changedDate
 
+    }
     const validateEmail = function (email) {
         const re = /^([a-zA-Z\d+)(\.[a-zA-Z\d]+)?@([a-zA-Z\d]+).([a-zA-Z]{2,8})(\.[a-zA-Z\d]+)?$/;
         return re.test(String(email).toLowerCase());
@@ -31,26 +36,26 @@ const AddForm = (props) => {
 
 
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [uname, setUniversity] = useState("");
+    const [location, setLocation] = useState("");
+    const [uid, setUniversityID] = useState(0);
     async function postData() {
 
-        if (name === '' || uname === '' || email === '') {
+        if (name === '') {
             alert('fields can not be blank');
         }
         else {
-            if (!validateName(name) || !validateEmail(email) || !validateUniversity(uname)) {
+            if (!validateName(name)) {
                 alert('information is not in correct format')
             }
             else {
                 try {
-                    await fetch('http://localhost:8080/create/', {
+                    await fetch('http://localhost:9000/university/create', {
                         method: 'post',
                         headers: {
                             'Accept': 'application/json',
                             'Content-type': 'application/json'
                         },
-                        body: JSON.stringify({ "id": 0, "name": `${name}`, "email": `${email}`, "universityName": `${uname}` })
+                        body: JSON.stringify({ "id": parseInt(uid), "name": `${name}`, "location": `${location}` })
 
                     });
 
@@ -68,29 +73,31 @@ const AddForm = (props) => {
     useEffect(() => {
     })
     return (
-        <div className="modal" id="myModal" title = "myModal">
+        <div style = {{ margin: "100px auto" }} className="modal" id="myModal" title="myModal">
             <div className="modal-dialog modal-content modal-lg">
                 <div className="modal-content">
                     <div className="modal-header bg-success">
-                        <h4 className="modal-title">Add New Studend </h4>
-                        <button tilte = "close-addform-btn" type="button" className="close" data-dismiss="modal" onClick={() => {
+                        <h4 className="modal-title">Add New University </h4>
+                        <button tilte="close-addform-btn" type="button" className="close" data-dismiss="modal" onClick={() => {
                             props.hideMethod();
                         }}>&times;</button>
                     </div>
                     <div className="modal-body">
                         <div className="form-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" className="form-control" id="email" placeholder="Enter Name" value={name} onChange={(e) => setName(e.target.value)} />
+                            {/* <label htmlFor="email"></label> */}
+                            <input type="email" className="form-control" id="id" placeholder="Enter University ID" value={uid} onChange={(e) => setUniversityID(e.target.value)} />
+                        </div>
+                        <div className="form-group">
+                            {/* <label htmlFor="name">Name:</label> */}
+                            <input type="text" className="form-control" id="name" placeholder="Enter Name" value={name} onChange={(e) => setName(e.target.value)} />
 
                         </div>
+
                         <div className="form-group">
-                            <label htmlFor="email">Email:</label>
-                            <input type="email" className="form-control" id="email" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            {/* <label htmlFor="uid">University ID:</label> */}
+                            <input type="text" className="form-control" id="location" placeholder="Enter University Location" value={location} onChange={(e) => setLocation(e.target.value)} />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="uname">University:</label>
-                            <input type="text" className="form-control" id="email" placeholder="Enter University Name" value={uname} onChange={(e) => setUniversity(e.target.value)} />
-                        </div>
+
                         <div style={{ float: 'left' }} className="modal-footer">
                             <button onClick={() => {
                                 postData();
